@@ -151,7 +151,6 @@
                                 <table class="table" id="example">
                                     <thead>
                                         <tr>
-                                            <th>STT</th>
                                             <th>Tên Công Việc</th>
                                             <th>Dự Án</th>
                                             <th>Ngày Bắt Đầu</th>
@@ -163,7 +162,6 @@
                                     <tbody>
                                     <c:forEach items="${profile.tasks}" var="item">
                                     	<tr>
-                                            <td>1</td>
                                             <td>${item.name}</td>
                                             <td>${item.jobName}</td>
                                             <td>${item.startDate}</td>
