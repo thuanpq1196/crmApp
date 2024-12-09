@@ -25,6 +25,7 @@
     <!-- color CSS -->
     <link href="css/colors/blue-dark.css" id="theme" rel="stylesheet">
     <link rel="stylesheet" href="./css/custom.css">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -40,87 +41,8 @@
     </div>
     <div id="wrapper">
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top m-b-0">
-                <div class="navbar-header"> 
-                    <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse">
-                        <i class="fa fa-bars"></i>
-                    </a>
-                    <div class="top-left-part">
-                        <a class="logo" href="index.html">
-                            <b>
-                                <img src="plugins/images/pixeladmin-logo.png" alt="home" />
-                            </b>
-                            <span class="hidden-xs">
-                                <img src="plugins/images/pixeladmin-text.png" alt="home" />
-                            </span>
-                        </a>
-                    </div>
-                    <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
-                        <li>
-                            <form role="search" class="app-search hidden-xs">
-                                <input type="text" placeholder="Search..." class="form-control"> 
-                                <a href="">
-                                    <i class="fa fa-search"></i>
-                                </a>
-                            </form>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-top-links navbar-right pull-right">
-                        <li>
-                            <div class="dropdown">
-                                <a class="profile-pic dropdown-toggle" data-toggle="dropdown" href="#"> 
-                                    <img src="plugins/images/users/varun.jpg" alt="user-img" width="36" class="img-circle" />
-                                    <b class="hidden-xs">Cybersoft</b> 
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="profile.html">Thông tin cá nhân</a></li>
-                                    <li><a href="#">Thống kê công việc</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">Đăng xuất</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.navbar-header -->
-                <!-- /.navbar-top-links -->
-                <!-- /.navbar-static-side -->
-            </nav>
-        <!-- Left navbar-header -->
-        <div class="navbar-default sidebar" role="navigation">
-            <div class="sidebar-nav navbar-collapse slimscrollsidebar">
-                <ul class="nav" id="side-menu">
-                    <li style="padding: 10px 0 0;">
-                        <a href="index.html" class="waves-effect"><i class="fa fa-clock-o fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Dashboard</span></a>
-                    </li>
-                    <li>
-                        <a href="user-table.html" class="waves-effect"><i class="fa fa-user fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Thành viên</span></a>
-                    </li>
-                    <li>
-                        <a href="role-table.html" class="waves-effect"><i class="fa fa-modx fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Quyền</span></a>
-                    </li>
-                    <li>
-                        <a href="groupwork.html" class="waves-effect"><i class="fa fa-table fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Dự án</span></a>
-                    </li>
-                    <li>
-                        <a href="task.html" class="waves-effect"><i class="fa fa-table fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Công việc</span></a>
-                    </li>
-                    <li>
-                        <a href="blank.html" class="waves-effect"><i class="fa fa-columns fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Blank Page</span></a>
-                    </li>
-                    <li>
-                        <a href="404.html" class="waves-effect"><i class="fa fa-info-circle fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Error 404</span></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <div id="loadnavbar"></div>
+        
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper">
@@ -130,7 +52,7 @@
                         <h4 class="page-title">Danh sách thành viên</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
-                        <a href="user-add.html" class="btn btn-sm btn-success">Thêm mới</a>
+                        <a href="${pageContext.request.contextPath}/user-add" class="btn btn-sm btn-success">Thêm mới</a>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -142,24 +64,30 @@
                                 <table class="table" id="example">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <!-- <th>STT</th> -->
                                             <th>Email</th>
-                                            <th>Full Name</th>
-                                            <th>Role Name</th>
-                                            <th>#</th>
+                                            <th>Tên</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Số điện thoại</th>
+                                            <th>Phone Number</th>
+                                            <th>Trạng thái</th>
+                                            <th>Hành Động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <c:forEach items="${users}" var="item" >
                                         <tr>
-                                            <td>${item.id}</td>
+                                            <%-- <td>${index++}</td> --%>
                                             <td>${item.email}</td>
                                             <td>${item.fullName}</td>
                                             <td>${item.roleName}</td>
+                                            <td>${item.address}</td>
+                                            <td>${item.phoneNumber}</td>
+                                            <td>${item.isActive == 0 ? 'Ngừng hoạt động':'Họat động'}</td>
                                             <td>
-                                                <a href="#" class="btn btn-sm btn-primary">Sửa</a>
-                                                <a href="/crm_app07/users?id=${item.id}" class="btn btn-sm btn-danger">Xóa</a>
-                                                <a href="user-details.html" class="btn btn-sm btn-info">Xem</a>
+                                                <a href="${pageContext.request.contextPath}/user-update?id=${item.id}" class="btn btn-sm btn-primary">Sửa</a>
+                                                <a href="${pageContext.request.contextPath}/user-detail?id=${item.id}" class="btn btn-sm btn-info">Xem</a>
+                                                <a href="${pageContext.request.contextPath}/user-delete?id=${item.id}" class="btn btn-sm btn-danger">${item.isActive == 0 ? 'Bật hoạt động':'Tắt hoạt động'}</a>
                                             </td>
                                         </tr>
                                      </c:forEach>
@@ -327,6 +255,11 @@
             $('#example').DataTable();
         });
     </script>
+    <script>
+		$(function(){
+		  $("#loadnavbar").load("nav.jsp");
+		});
+	</script>
 </body>
 
 </html>

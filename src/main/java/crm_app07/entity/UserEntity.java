@@ -8,6 +8,8 @@ public class UserEntity {
 	private String address;
 	private String phoneNumber;
 	private int roleId;
+	private String roleName;
+	private int isActive;
 	public int getId() {
 		return id;
 	}
@@ -50,6 +52,19 @@ public class UserEntity {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+	public String getRoleName() {
+		return roleName;
+	}
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+	public int getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(int isActive) {
+		this.isActive = isActive;
+	}
+	
 	
 	
 	

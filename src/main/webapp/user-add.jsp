@@ -23,6 +23,7 @@
     <link href="css/style.css" rel="stylesheet">
     <!-- color CSS -->
     <link href="css/colors/blue-dark.css" id="theme" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -38,94 +39,14 @@
     </div>
     <div id="wrapper">
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top m-b-0">
-                <div class="navbar-header"> 
-                    <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse">
-                        <i class="fa fa-bars"></i>
-                    </a>
-                    <div class="top-left-part">
-                        <a class="logo" href="index.html">
-                            <b>
-                                <img src="plugins/images/pixeladmin-logo.png" alt="home" />
-                            </b>
-                            <span class="hidden-xs">
-                                <img src="plugins/images/pixeladmin-text.png" alt="home" />
-                            </span>
-                        </a>
-                    </div>
-                    <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
-                        <li>
-                            <form role="search" class="app-search hidden-xs">
-                                <input type="text" placeholder="Search..." class="form-control"> 
-                                <a href="">
-                                    <i class="fa fa-search"></i>
-                                </a>
-                            </form>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-top-links navbar-right pull-right">
-                        <li>
-                            <div class="dropdown">
-                                <a class="profile-pic dropdown-toggle" data-toggle="dropdown" href="#"> 
-                                    <img src="plugins/images/users/varun.jpg" alt="user-img" width="36" class="img-circle" />
-                                    <b class="hidden-xs">Cybersoft</b> 
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="profile.html">Thông tin cá nhân</a></li>
-                                    <li><a href="#">Thống kê công việc</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">Đăng xuất</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.navbar-header -->
-                <!-- /.navbar-top-links -->
-                <!-- /.navbar-static-side -->
-            </nav>
-        <!-- Left navbar-header -->
-        <div class="navbar-default sidebar" role="navigation">
-            <div class="sidebar-nav navbar-collapse slimscrollsidebar">
-                <ul class="nav" id="side-menu">
-                    <li style="padding: 10px 0 0;">
-                        <a href="index.html" class="waves-effect"><i class="fa fa-clock-o fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Dashboard</span></a>
-                    </li>
-                    <li>
-                        <a href="user-table.html" class="waves-effect"><i class="fa fa-user fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Thành viên</span></a>
-                    </li>
-                    <li>
-                        <a href="role-table.html" class="waves-effect"><i class="fa fa-modx fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Quyền</span></a>
-                    </li>
-                    <li>
-                        <a href="groupwork.html" class="waves-effect"><i class="fa fa-table fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Dự án</span></a>
-                    </li>
-                    <li>
-                        <a href="task.html" class="waves-effect"><i class="fa fa-table fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Công việc</span></a>
-                    </li>
-                    <li>
-                        <a href="blank.html" class="waves-effect"><i class="fa fa-columns fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Blank Page</span></a>
-                    </li>
-                    <li>
-                        <a href="404.html" class="waves-effect"><i class="fa fa-info-circle fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Error 404</span></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <div id="loadnavbar"></div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Thêm mới thành viên</h4>
+                        <h4 class="page-title">${user.id!= null? "Chỉnh sửa thông tin thành viên" : "Thêm mới thành viên"}</h4>
                     </div>
                 </div>
                 <!-- /.row -->
@@ -134,24 +55,30 @@
                     <div class="col-md-2 col-12"></div>
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
-                            <form class="form-horizontal form-material" action="user-add" method="post">
+                            <form class="form-horizontal form-material" action="${user.id != null ? 'user-update' : 'user-add' }" method="post">
+                            	<div class="form-group" hidden>
+                                    <label class="col-md-12">ID</label>
+                                    <div class="col-md-12">
+                                        <input name="id" type="text" 
+                                            class="form-control form-control-line" value="${user.id}"> </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Full Name</label>
                                     <div class="col-md-12">
-                                        <input name="fullname" type="text" placeholder="Johnathan Doe"
-                                            class="form-control form-control-line"> </div>
+                                        <input name="fullname" type="text" 
+                                            class="form-control form-control-line" value="${user.fullName}"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="example-email" class="col-md-12">Email</label>
                                     <div class="col-md-12">
-                                        <input  type="email" placeholder="johnathan@admin.com"
-                                            class="form-control form-control-line" name="email"
+                                        <input  type="email" 
+                                            class="form-control form-control-line" name="email" value ="${user.email}"
                                             id="example-email"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Password</label>
                                     <div class="col-md-12">
-                                        <input name="password" type="password" value="password" class="form-control form-control-line">
+                                        <input name="password" type="password" value="${user.password}" class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -159,8 +86,16 @@
                                     <div class="col-sm-12">
                                         <select name = "role" class="form-control form-control-line">
                                         <c:forEach items="${roles}" var="item">
-                                        	<option value="${item.id}">${item.name}</option>
+                                        	<c:choose>
+    											<c:when test="${user.id != null && item.id == user.roleId}">
+  													<option value="${item.id}" selected>${item.description}</option>
+    											</c:when>    
+											    <c:otherwise>
+											    	<option value="${item.id}">${item.description}</option>
+											    </c:otherwise>
+											</c:choose>
                                         </c:forEach>
+                                        
                                             <!-- <option>London</option>
                                             <option>India</option>
                                             <option>Usa</option>
@@ -170,8 +105,29 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="example-address" class="col-md-12">Address</label>
+                                    <div class="col-md-12">
+                                        <input type="text"
+                                            class="form-control form-control-line" name="address" value ="${user.address}"
+                                            id="example-address"> </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="example-phone" class="col-md-12">Phone number</label>
+                                    <div class="col-md-12">
+                                        <input  type="tel" 
+                                            class="form-control form-control-line" name="phoneNumber" value ="${user.phoneNumber}"
+                                            id="example-phone" pattern="[0-9]{3}[0-9]{3}[0-9]{4}"> </div>
+                                </div>
+                                <div class="form-group" hidden>
+                                    <label for="example-phone" class="col-md-12">Is Active</label>
+                                    <div class="col-md-12">
+                                        <input  type="text" 
+                                            class="form-control form-control-line" name="isActive" value ="${user.isActive}"
+                                            id="example-active" ></div>
+                                </div>
+                                <div class="form-group">
                                     <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-success">Add User</button>
+                                        <button type="submit" class="btn btn-success">${user.id != null ? 'Update User' : 'Add User' }</button>
                                         <a href="user-table.jsp" class="btn btn-primary">Quay lại</a>
                                     </div>
                                 </div>
@@ -200,6 +156,11 @@
     <script src="js/waves.js"></script>
     <!-- Custom Theme JavaScript -->
     <script src="js/custom.min.js"></script>
+    <script>
+		$(function(){
+		  $("#loadnavbar").load("nav.jsp");
+		});
+	</script>
 </body>
 
 </html>    

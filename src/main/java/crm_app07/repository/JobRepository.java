@@ -24,7 +24,32 @@ public class JobRepository {
 				JobEntity je = new JobEntity();
 				je.setId(rs.getInt("id"));
 				je.setName(rs.getString("name"));
-				je.setDescription(rs.getString("description"));
+				je.setDescription(rs.getString("descriptions"));
+				je.setCreatorId(rs.getInt("creator_id"));
+				je.setStartDate(rs.getDate("start_date"));
+				je.setEndDate(rs.getDate("end_date"));
+				
+				jobs.add(je);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return jobs;
+	}
+	
+	public List<JobEntity> findAllJobByLeaderId(int id){
+		List<JobEntity> jobs = new ArrayList<>();
+		Connection conn = MysqlConfig.getConnecttion();
+		String sqlQuery = "SELECT * FROM jobs j WHERE j.creator_id =?";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sqlQuery);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				JobEntity je = new JobEntity();
+				je.setId(rs.getInt("id"));
+				je.setName(rs.getString("name"));
+				je.setDescription(rs.getString("descriptions"));
 				je.setCreatorId(rs.getInt("creator_id"));
 				je.setStartDate(rs.getDate("start_date"));
 				je.setEndDate(rs.getDate("end_date"));
@@ -40,7 +65,7 @@ public class JobRepository {
 	public JobEntity findByID(int id){
 		JobEntity je = new JobEntity();
 		Connection conn = MysqlConfig.getConnecttion();
-		String sqlQuery = "SELECT * FROM jobs j WHERE j.id = ?";
+		String sqlQuery = "SELECT j.* FROM jobs j  WHERE j.id = ?";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sqlQuery);
 			ps.setInt(1, id);
@@ -49,7 +74,7 @@ public class JobRepository {
 				
 				je.setId(rs.getInt("id"));
 				je.setName(rs.getString("name"));
-				je.setDescription(rs.getString("description"));
+				je.setDescription(rs.getString("descriptions"));
 				je.setCreatorId(rs.getInt("creator_id"));
 				je.setStartDate(rs.getDate("start_date"));
 				je.setEndDate(rs.getDate("end_date"));
@@ -63,7 +88,7 @@ public class JobRepository {
 	public int addJob(String name, String description, Date startDate, Date endDate, int creatorID) {
 		Connection conn = MysqlConfig.getConnecttion();
 		int i =0;
-		String sqlQuery = "INSERT INTO jobs(name, description, start_date, end_date, creator_id) VALUES(?,?,?,?,?)";
+		String sqlQuery = "INSERT INTO jobs(name, descriptions, start_date, end_date, creator_id) VALUES(?,?,?,?,?)";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sqlQuery);
 			ps.setString(1, name);
@@ -82,7 +107,7 @@ public class JobRepository {
 	public int updateJob(JobEntity job) {
 		Connection conn = MysqlConfig.getConnecttion();
 		int i = 0;
-		String sqlQuery = "UPDATE jobs SET name = ?, description = ?, start_date = ?, end_date = ?, creator_id =? WHERE id = ? ";
+		String sqlQuery = "UPDATE jobs SET name = ?, descriptions = ?, start_date = ?, end_date = ?, creator_id =? WHERE id = ? ";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sqlQuery);
 			ps.setString(1, job.getName());
@@ -112,7 +137,7 @@ public class JobRepository {
 			e.printStackTrace();
 		}
 		return i;
-	}
+	} 
 	
 
 }

@@ -1,6 +1,7 @@
 package crm_app07.entity;
 
 import java.sql.Date;
+import java.util.List;
 
 public class JobEntity {
 	private int id;
@@ -9,6 +10,11 @@ public class JobEntity {
 	private Date startDate;
 	private Date endDate;
 	private int creatorId;
+	private List<TaskEntity> tasks;
+	private double percentCompleted;
+	private double percentOnGoing;
+	private double percentNotYetImplemented;
+	
 	public int getId() {
 		return id;
 	}
@@ -44,6 +50,30 @@ public class JobEntity {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public List<TaskEntity> getTasks() {
+		return tasks;
+	}
+	public void setTasks(List<TaskEntity> tasks) {
+		this.tasks = tasks;
+	}
+	public double getPercentCompleted() {
+		return percentCompleted;
+	}
+	public void setPercentCompleted(double percentCompleted) {
+		this.percentCompleted = percentCompleted;
+	}
+	public double getPercentOnGoing() {
+		return percentOnGoing;
+	}
+	public void setPercentOnGoing(double percentOnGoing) {
+		this.percentOnGoing = percentOnGoing;
+	}
+	public double getPercentNotYetImplemented() {
+		return percentNotYetImplemented;
+	}
+	public void setPercentNotYetImplemented(double percentNotYetImplemented) {
+		this.percentNotYetImplemented = percentNotYetImplemented;
 	}
 	
 	

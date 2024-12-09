@@ -51,5 +51,51 @@ public class RoleRepository {
 		}
 		return re;
 	}
+	
+	public int addRole(String name, String description) {
+		int i =0;
+		String sqlQuery = "INSERT INTO roles(name, description) VALUES(?,?)";
+		Connection conn = MysqlConfig.getConnecttion();
+		try {
+			PreparedStatement ps = conn.prepareStatement(sqlQuery);
+			ps.setString(1, name);
+			ps.setString(2, description);
+			i = ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return i;
+	}
+	
+	public int updateRole(RoleEntity re) {
+		int i =0;
+		String sqlQuery = "UPDATE roles r SET r.name =?, r.description =? WHERE r.id = ?";
+		Connection conn = MysqlConfig.getConnecttion();
+		try {
+			PreparedStatement ps = conn.prepareStatement(sqlQuery);
+			ps.setString(1, re.getName());
+			ps.setString(2, re.getDescription());
+			ps.setInt(3, re.getId());
+			i = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return i;
+	}
+	
+	public int deleteRole(int id) {
+		int i =0;
+		String sqlQuery = "DELETE FROM roles r WHERE r.id = ?";
+		Connection conn = MysqlConfig.getConnecttion();
+		try {
+			PreparedStatement ps = conn.prepareStatement(sqlQuery);
+			ps.setInt(1, id);
+			i = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return i;
+	}
 
 }

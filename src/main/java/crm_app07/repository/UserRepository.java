@@ -16,7 +16,9 @@ public class UserRepository {
 
 	public List<UserEntity> findByEmailAndPassword(String email, String password) {
 		List<UserEntity> users = new ArrayList<UserEntity>();
-		String sqlQuery ="SELECT u.id FROM users u WHERE u.email = ? AND u.password = ?";
+		String sqlQuery ="SELECT u.id, r.name FROM users u"
+				+ " JOIN roles r ON u.role_id = r.id"
+				+ " WHERE u.email = ? AND u.password = ? AND u.is_active = 1";
 		Connection conn = MysqlConfig.getConnecttion();
 		try {
 			PreparedStatement statement = conn.prepareStatement(sqlQuery);
@@ -26,7 +28,7 @@ public class UserRepository {
 			while(rs.next()) {
 				UserEntity ue = new UserEntity();
 				ue.setId(rs.getInt("id"));
-				
+				ue.setRoleName(rs.getString("name"));				
 				users.add(ue);
 			}
 		} catch (SQLException e) {
@@ -35,9 +37,37 @@ public class UserRepository {
 		return users;
 	}
 	
+	public UserEntity findByID(int id){
+		List<UserEntity> users = new ArrayList<UserEntity>();
+		String sqlQuery = "SELECT u.*,r.name  FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id =?";
+		Connection conn = MysqlConfig.getConnecttion();
+		try {
+			PreparedStatement statement = conn.prepareStatement(sqlQuery);
+			statement.setInt(1, id);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				UserEntity user = new UserEntity();
+				user.setId(rs.getInt("id"));
+				user.setEmail(rs.getString("email"));
+				user.setFullName(rs.getString("fullname"));
+				user.setRoleId(rs.getInt("role_id"));
+				user.setAddress(rs.getString("address"));
+				user.setPhoneNumber(rs.getString("phone_number"));
+				user.setRoleName(rs.getString("name"));
+				user.setPassword(rs.getString("password"));
+				user.setIsActive(rs.getInt("is_active"));
+				users.add(user);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return users.get(0);
+	}
+	
 	public List<UserEntity> findAll(){
 		List<UserEntity> users = new ArrayList<UserEntity>();
-		String sqlQuery = "SELECT u.id, u.email, u.fullname, u.role_id FROM users u";
+		String sqlQuery = "SELECT u.id, u.email, u.fullname, u.role_id, u.address, u.phone_number, r.description AS role_name, u.is_active FROM users u JOIN roles r ON u.role_id = r.id";
 		Connection conn = MysqlConfig.getConnecttion();
 		try {
 			PreparedStatement statement = conn.prepareStatement(sqlQuery);
@@ -48,6 +78,10 @@ public class UserRepository {
 				user.setEmail(rs.getString("email"));
 				user.setFullName(rs.getString("fullname"));
 				user.setRoleId(rs.getInt("role_id"));
+				user.setAddress(rs.getString("address"));
+				user.setPhoneNumber(rs.getString("phone_number"));
+				user.setRoleName(rs.getString("role_name"));
+				user.setIsActive(rs.getInt("is_active"));
 				users.add(user);
 
 			}
@@ -58,23 +92,37 @@ public class UserRepository {
 	}
 	
 	public int deleteById(int id) {
-		int rowDeleted = 0;
-		String sqlQuery ="DELETE FROM users u WHERE u.id = ?";
+		int rowUpdated = 0;
+		int isActive = 0;
 		Connection conn = MysqlConfig.getConnecttion();
+		String selectQuery ="SELECT u.is_active FROM users u WHERE u.id =?";
+		try {
+			PreparedStatement statusStatement = conn.prepareStatement(selectQuery);
+			statusStatement.setInt(1, id);
+			ResultSet rs = statusStatement.executeQuery();
+			while(rs.next()) {
+				isActive = rs.getInt("is_active");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String sqlQuery =( isActive == 1 ? "UPDATE users u SET u.is_active = 0 WHERE u.id = ?" : "UPDATE users u SET u.is_active = 1 WHERE u.id = ?");
+		
 		try {
 			PreparedStatement statement = conn.prepareStatement(sqlQuery);
 			statement.setInt(1,id);
-			rowDeleted  = statement.executeUpdate();
+			rowUpdated  = statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return rowDeleted;
+		return rowUpdated;
 	}
 	
 	public int addUser(String email, String password, String fullName, String address, String phoneNumber, int roleID) {
 		int rowInserted = 0;
-		String sqlQuery = "INSERT INTO users(email, password, fullname, address, phone_number, role_id) VALUES(?,?,?,?,?,?)";
+		String sqlQuery = "INSERT INTO users(email, password, fullname, address, phone_number, role_id, is_active) VALUES(?,?,?,?,?,?,1)";
 		Connection conn = MysqlConfig.getConnecttion();
 		try {
 			PreparedStatement ps = conn.prepareStatement(sqlQuery);
@@ -92,10 +140,10 @@ public class UserRepository {
 		return rowInserted;
 		
 	}
-	public int updateJob(UserEntity user) {
+	public int updateUser(UserEntity user) {
 		Connection conn = MysqlConfig.getConnecttion();
 		int i = 0;
-		String sqlQuery = "UPDATE users SET email = ?, password =?, fullname = ?, address = ?, phone_number =?, role_id =? WHERE id = ? ";
+		String sqlQuery = "UPDATE users SET email = ?, password =?, fullname = ?, address = ?, phone_number =?, role_id =?, is_active = ? WHERE id = ? ";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sqlQuery);
 			ps.setString(1, user.getEmail());
@@ -104,7 +152,8 @@ public class UserRepository {
 			ps.setString(4, user.getAddress());
 			ps.setString(5, user.getPhoneNumber());
 			ps.setInt(6, user.getRoleId());
-			ps.setInt(7, user.getId());
+			ps.setInt(7, user.getIsActive());
+			ps.setInt(8, user.getId());
 			
 			i = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -112,4 +161,24 @@ public class UserRepository {
 		}
 		return i;
 	}
+	public List<UserEntity> findByRole(){
+		List<UserEntity> users = new ArrayList<UserEntity>();
+		String sqlQuery = "SELECT u.id,u.fullname  FROM users u WHERE u.role_id =3 AND u.is_active = 1";
+		Connection conn = MysqlConfig.getConnecttion();
+		try {
+			PreparedStatement statement = conn.prepareStatement(sqlQuery);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				UserEntity user = new UserEntity();
+				user.setId(rs.getInt("id"));
+				user.setFullName(rs.getString("fullname"));
+				users.add(user);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return users;
+	}
+	
 }
