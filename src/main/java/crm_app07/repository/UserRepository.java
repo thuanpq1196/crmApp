@@ -127,7 +127,7 @@ public class UserRepository {
 		try {
 			PreparedStatement ps = conn.prepareStatement(sqlQuery);
 			ps.setString(1, email);
-			ps.setString(2, MD5.getMd5(password));
+			ps.setString(2, password);
 			ps.setString(3, fullName);
 			ps.setString(4, address);
 			ps.setString(5, phoneNumber);
@@ -147,7 +147,7 @@ public class UserRepository {
 		try {
 			PreparedStatement ps = conn.prepareStatement(sqlQuery);
 			ps.setString(1, user.getEmail());
-			ps.setString(2, MD5.getMd5(user.getPassword()));
+			ps.setString(2, user.getPassword());
 			ps.setString(3, user.getFullName());
 			ps.setString(4, user.getAddress());
 			ps.setString(5, user.getPhoneNumber());

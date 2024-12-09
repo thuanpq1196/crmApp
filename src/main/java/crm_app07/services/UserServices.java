@@ -15,7 +15,7 @@ import utils.MD5;
 public class UserServices {
 	private UserRepository ur = new UserRepository();
 	public boolean getUserByEmailAndPassword(String email, String password, String rememberMe, HttpServletRequest req, HttpServletResponse resp){
-		String passwordEncoded = MD5.getMd5(password);
+		String passwordEncoded = password;
 		List<UserEntity> users = ur.findByEmailAndPassword(email, passwordEncoded);
 		if(users.size() > 0) {
 			if(rememberMe!= null) {
